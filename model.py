@@ -84,7 +84,7 @@ start_time = time.time()
 with torch.no_grad():
     outputs = model.generate(
         **inputs,
-        max_new_tokens=512,  # Generate more tokens for complex response
+        max_new_tokens=256,  # Generate more tokens for complex response
         do_sample=False,     # Deterministic for faster generation
         pad_token_id=tokenizer.eos_token_id
     )

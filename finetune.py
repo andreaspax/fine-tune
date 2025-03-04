@@ -38,8 +38,8 @@ lora_config = peft.LoraConfig(
 )
 
 print("Loading base model...")
-tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained(
+tokenizer = transformers.AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+model = transformers.AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.float32,  # Use float32 for training
     trust_remote_code=True,
@@ -51,7 +51,7 @@ model.gradient_checkpointing_enable()
 
 # Get the LoRA model
 print("Applying LoRA adapters...")
-model = get_peft_model(model, lora_config)
+model = peft.get_peft_model(model, lora_config)
 print(f"Trainable parameters: {model.print_trainable_parameters()}")
 
 # Prepare your dataset
