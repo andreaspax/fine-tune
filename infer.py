@@ -1,4 +1,5 @@
 import transformers
+import os
 
 def generate_assessment(
    age, gender, occupation, activity_level, other_comments,
@@ -8,8 +9,8 @@ def generate_assessment(
    functional_limitations, patient_goals, equipment_at_home):
   
    model_name = "Qwen/Qwen2-0.5B"
-   model = transformers.AutoModelForCausalLM.from_pretrained(model_name)
-   tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+   model = transformers.AutoModelForCausalLM.from_pretrained(model_name, token=os.getenv("HF_TOKEN_CURSOR"))
+   tokenizer = transformers.AutoTokenizer.from_pretrained(model_name, token=os.getenv("HF_TOKEN_CURSOR"))
    pipe = transformers.pipeline("text-generation", model=model, tokenizer=tokenizer)
    chat_history = [
    {"role": "system", "content": "You are an AI assistant specialized in physiotherapy assessments. Your task is to conduct an initial assessment for me using the provided information. Analyze the data and generate a concise summary of my condition, potential diagnoses, and recommendations for further evaluation or treatment."},
@@ -49,7 +50,7 @@ def generate_assessment(
    Generate the text in nicely formatted Markdown, using bold and tables where necessary to make the assessment more clear.'''}
    ]
    print(chat_history)
-   outputs = pipe(chat_history, max_new_tokens=256)
+   outputs = pipe(chat_history, max_new_tokens=512)
 
 
    return outputs[0]["generated_text"][-1]['content']
